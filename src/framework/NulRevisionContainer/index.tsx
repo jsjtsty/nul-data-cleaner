@@ -16,10 +16,12 @@ const NulRevisionContainer: React.FC<RevisionContainerProps> = (props) => {
 
   const { children, total, page, onChange, onSave, onRestore } = props;
 
-  const [pageNavigate, setPageNavigate] = React.useState<number>(page);
+  const [pageNavigate, setPageNavigate] = React.useState<string>('');
+  const [pageNavigateError, setPageNavigateError] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    setPageNavigate(page);
+    setPageNavigate(`${page}`);
+    setPageNavigateError(false);
   }, [page]);
 
   return (
@@ -44,13 +46,17 @@ const NulRevisionContainer: React.FC<RevisionContainerProps> = (props) => {
             label='Page'
             type='number'
             size='small'
+            error={pageNavigateError}
             value={pageNavigate}
             onChange={(event) => {
               const svalue = event.target.value.trim();
-              if (svalue === '') {
-                return;
+              setPageNavigate(svalue);
+            }}
+            slotProps={{
+              htmlInput: {
+                min: 1,
+                max: total
               }
-              setPageNavigate(parseInt(svalue));
             }}
             fullWidth
           />
@@ -58,7 +64,14 @@ const NulRevisionContainer: React.FC<RevisionContainerProps> = (props) => {
             variant='outlined'
             size='small'
             onClick={() => {
-              if (onChange) onChange(pageNavigate);
+              if (onChange) {
+                const value = parseInt(pageNavigate);
+                if (isNaN(value) || value <= 0 || value > total) {
+                  setPageNavigateError(true);
+                  return;
+                }
+                onChange(value);
+              }
             }}
           >
             GO
