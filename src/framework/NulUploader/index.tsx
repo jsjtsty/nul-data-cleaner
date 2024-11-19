@@ -1,10 +1,18 @@
 import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AgricultureMultipleDataEntry, AgricultureMultipleParser } from "../../util/parsers/AgricultureMultipleParser";
 import { NulReviseDatabase } from "../../util/database/NulReviseDatabase";
+import { asyncAction } from "../../util/system/Promise";
+import { DataEntry, Parser } from "../../util/parsers/Parser";
 
-const UploadPage: React.FC = () => {
+interface NulUploaderProps<T> {
+  parser: Parser<T>;
+  dataStore: string;
+}
+
+const NulUploader = <T extends DataEntry>(props: NulUploaderProps<T>) => {
+
+  const { parser, dataStore } = props;
 
   const [loaded, setLoaded] = useState<boolean>(false);
 
@@ -19,9 +27,8 @@ const UploadPage: React.FC = () => {
       reader.onload = async () => {
         try {
           const fileData = reader.result as string;
-          const parser = new AgricultureMultipleParser();
           const parsed = parser.readOriginString(fileData);
-          const db = new NulReviseDatabase<AgricultureMultipleDataEntry>('test');
+          const db = new NulReviseDatabase<T>(dataStore);
           await db.connect();
           await db.write(parsed);
           db.close();
@@ -36,25 +43,22 @@ const UploadPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const operation = async () => {
-      if (!loaded) {
-        const db = new NulReviseDatabase<AgricultureMultipleDataEntry>('test');
-        await db.connect();
-        const data = await db.load();
-        db.close();
-        if (data.length > 0) {
-          setLoaded(true);
+    if (!loaded) {
+      asyncAction({
+        action: async () => {
+          const db = new NulReviseDatabase<T>(dataStore);
+          await db.connect();
+          const data = await db.load();
+          db.close();
+          if (data.length > 0) {
+            setLoaded(true);
+          }
         }
-      } else {
-        navigate('/editor');
-      }
-    };
-
-    operation()
-      .catch((err) => {
-        console.error(err);
       });
-  }, [loaded, navigate]);
+    } else {
+      navigate('../editor');
+    }
+  }, [loaded, navigate, dataStore]);
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
@@ -77,4 +81,4 @@ const UploadPage: React.FC = () => {
   );
 };
 
-export default UploadPage;
+export default NulUploader;
