@@ -129,5 +129,11 @@ class AgricultureProblemParser extends Parser<AgricultureProblemDataEntry> {
   }
 }
 
-export { AgricultureProblemParser, AgricultureProblemType };
+class AgricultureProblemResultParser extends AgricultureProblemParser {
+  public override readOriginString(data: string): AgricultureProblemData {
+    return JSON.parse(data);
+  }
+}
+
+export { AgricultureProblemParser, AgricultureProblemResultParser, AgricultureProblemType };
 export type { AgricultureProblemDataEntry, AgricultureProblemData, AgricultureProblemChoiceDataEntry, AgricultureProblemAnswerDataEntry };
