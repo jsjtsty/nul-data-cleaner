@@ -122,5 +122,5 @@ const NulEditorFramework = <T extends DataEntry>(props: NulEditorFrameworkProps<
   );
 };
 
-export default NulEditorFramework;
+export { NulEditorFramework };
 export type { NulEditorContext };

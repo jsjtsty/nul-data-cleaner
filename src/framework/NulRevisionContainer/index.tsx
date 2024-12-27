@@ -8,13 +8,17 @@ interface RevisionContainerProps {
   total: number;
   page: number;
   onChange?: (page: number) => void;
+  save?: boolean;
+  saveText?: string;
   onSave?: () => void;
+  restore?: boolean;
+  restoreText?: string;
   onRestore?: () => void;
 }
 
 const NulRevisionContainer: React.FC<RevisionContainerProps> = (props) => {
 
-  const { children, total, page, onChange, onSave, onRestore } = props;
+  const { children, total, page, onChange, save = true, saveText = 'Save', onSave, restore = true, restoreText = 'Restore', onRestore } = props;
 
   const [pageNavigate, setPageNavigate] = React.useState<string>('');
   const [pageNavigateError, setPageNavigateError] = React.useState<boolean>(false);
@@ -34,12 +38,16 @@ const NulRevisionContainer: React.FC<RevisionContainerProps> = (props) => {
             {children}
           </Box>
         )}
-        <Button variant='outlined' onClick={onRestore}>
-          Reset
-        </Button>
-        <Button variant='contained' onClick={onSave}>
-          Save
-        </Button>
+        {restore &&
+          <Button variant='outlined' onClick={onRestore}>
+            {restoreText}
+          </Button>
+        }
+        {save &&
+          <Button variant='contained' onClick={onSave}>
+            {saveText}
+          </Button>
+        }
         <Stack direction='row' spacing={1}>
           <TextField
             id='outlined-number'

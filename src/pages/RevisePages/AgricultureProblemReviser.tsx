@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import NulEditorFramework, { NulEditorContext } from "../../framework/NulEditorFramework";
+import { NulEditorContext, NulEditorFramework } from "../../framework/NulEditorFramework/NulEditorFramework";
 import { AgricultureProblemAnswerDataEntry, AgricultureProblemChoiceDataEntry, AgricultureProblemDataEntry, AgricultureProblemParser, AgricultureProblemType } from "../../util/parsers/AgricultureProblemParser";
 import { Autocomplete, Box, Card, CardContent, Stack, TextField, Typography } from "@mui/material";
 import typeData from "../../data/AgricultureProblemTypes.json";

@@ -5,6 +5,7 @@ import NulUploader from '../framework/NulUploader';
 import { AgricultureProblemReviser } from '../pages/RevisePages/AgricultureProblemReviser';
 import { AgricultureMultipleDataEntry, AgricultureMultipleParser } from '../util/parsers/AgricultureMultipleParser';
 import { AgricultureProblemDataEntry, AgricultureProblemParser, AgricultureProblemResultParser } from '../util/parsers/AgricultureProblemParser';
+import { AgricultureImageReviser } from '../pages/RevisePages/AgricultureImageReviser';
 
 
 const NulRouter: React.FC = () => {
@@ -33,6 +34,7 @@ const NulRouter: React.FC = () => {
           } />
           <Route path="editor" element={<AgricultureProblemReviser />} />
         </Route>
+        <Route path="/image" element={<AgricultureImageReviser />} />
       </Routes>
     </Router>
   );
