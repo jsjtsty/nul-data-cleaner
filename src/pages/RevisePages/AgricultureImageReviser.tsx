@@ -131,7 +131,7 @@ const AgricultureImageReviser: React.FC = () => {
                       maxWidth: '400px',
                       maxHeight: '400px'
                     }}
-                    src={`${BASE_URL}/${context.data.path}`}
+                    src={`${BASE_URL}/${encodeURIComponent(context.data.path)}`}
                   />
                 </Stack>
               </CardContent>
