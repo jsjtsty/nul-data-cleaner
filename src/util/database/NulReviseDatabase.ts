@@ -15,12 +15,32 @@ class NulReviseDatabase<T extends DataEntry> {
   }
 
   async connect(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const request = indexedDB.open('nul_revise', 1);
+    const newVersion = await new Promise<number>((resolve, reject) => {
+      const request = indexedDB.open('nul_revise');
 
-      request.onupgradeneeded = (event) => {
+      request.onsuccess = (event: Event) => {
         this.db = (event.target as IDBOpenDBRequest).result;
-        this.db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
+
+        const dataStoreExist = this.db.objectStoreNames.contains(this.storeName);
+        const newVersion = dataStoreExist ? 0 : this.db.version + 1;
+        resolve(newVersion);
+      };
+
+      request.onerror = (event: Event) => {
+        reject(event);
+      };
+    });
+
+    if (!newVersion) return;
+
+    this.db?.close();
+
+    await new Promise<void>((resolve, reject) => {
+      const request = indexedDB.open('nul_revise', newVersion);
+
+      request.onupgradeneeded = (event: Event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        db.createObjectStore(this.storeName, { keyPath: 'id', autoIncrement: true });
       };
 
       request.onsuccess = (event: Event) => {

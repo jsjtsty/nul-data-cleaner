@@ -33,7 +33,7 @@ const agricultureMultipleSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => builder
       .addCase(searchKnowledge.fulfilled, (state, action) => {
-        state.knowledge = action.payload.data;
+        state.knowledge = action.payload.result;
       })
 });
 

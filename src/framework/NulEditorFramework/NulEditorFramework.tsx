@@ -14,6 +14,7 @@ interface NulEditorContext<T extends DataEntry> {
 interface NulEditorFrameworkProps<T extends DataEntry> {
   parser: Parser<T>;
   store: string;
+  display?: (context: NulEditorContext<T>) => ReactNode;
   revision: (context: NulEditorContext<T>) => ReactNode;
   extractor: (data: T) => T;
   onChange: (context: NulEditorContext<T>) => void;
@@ -22,7 +23,7 @@ interface NulEditorFrameworkProps<T extends DataEntry> {
 
 const NulEditorFramework = <T extends DataEntry>(props: NulEditorFrameworkProps<T>) => {
 
-  const { parser, store, revision, extractor, onChange, onRestore } = props;
+  const { parser, store, display, revision, extractor, onChange, onRestore } = props;
 
   const [data, setData] = React.useState<T[]>([]);
   const [origin, setOrigin] = React.useState<T[]>([]);
@@ -69,6 +70,8 @@ const NulEditorFramework = <T extends DataEntry>(props: NulEditorFrameworkProps<
     URL.revokeObjectURL(link.href);
   };
 
+  const context = { origin, data, id };
+
   return (
     <>
       <Stack direction='row' display='flex' width='100%' height='100%'>
@@ -98,9 +101,11 @@ const NulEditorFramework = <T extends DataEntry>(props: NulEditorFrameworkProps<
           onRestore={() => {
             onRestore(origin[id]);
           }}
-        />
+        >
+          {dataLoaded && display && display(context)}
+        </NulRevisionContainer>
         <Box padding='20px' flexGrow={1} maxHeight='100%'>
-          {dataLoaded && revision({ origin, data, id })}
+          {dataLoaded && revision(context)}
         </Box>
       </Stack>
       <NulAlertBox
@@ -117,5 +122,5 @@ const NulEditorFramework = <T extends DataEntry>(props: NulEditorFrameworkProps<
   );
 };
 
-export default NulEditorFramework;
+export { NulEditorFramework };
 export type { NulEditorContext };

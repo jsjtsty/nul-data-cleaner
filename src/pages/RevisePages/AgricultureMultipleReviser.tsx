@@ -1,5 +1,5 @@
 import { Box, Button, InputAdornment, Stack, Tab, Tabs, TextareaAutosize, TextField, Typography } from "@mui/material";
-import NulEditorFramework, { NulEditorContext } from "../../framework/NulEditorFramework";
+import { NulEditorFramework, NulEditorContext } from "../../framework/NulEditorFramework/NulEditorFramework.tsx";
 import { AgricultureMultipleDataEntry, AgricultureMultipleParser } from "../../util/parsers/AgricultureMultipleParser";
 import React from 'react';
 import NulTextDifference from "../../components/NulTextDifference";
