@@ -1,5 +1,7 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import { DEFAULT_BASE_URL } from "./Net";
+import { clearAuth } from "../auth/Auth";
+import { navigate } from "../../action/Router";
 
 interface DownloadFileParams {
   url: string;
@@ -9,7 +11,19 @@ interface DownloadFileParams {
 const downloadFile = async (params: DownloadFileParams) => {
   const { url, baseUrl = DEFAULT_BASE_URL } = params;
 
-  const response = await axios.get(url, {
+  const instance: AxiosInstance = axios.create();
+
+  instance.interceptors.request.use(config => {
+    const token: string | null = localStorage.getItem('token');
+    if (token === null) {
+      clearAuth();
+      navigate('/login');
+    }
+    config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  });
+
+  const response = await instance.get(url, {
     responseType: 'blob',
     baseURL: baseUrl
   });

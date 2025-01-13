@@ -8,6 +8,8 @@ import { asyncAction } from "../../util/system/Promise";
 import { net } from "../../util/net/Net";
 import { HttpStatusCode } from "axios";
 import { downloadFile } from "../../util/net/Download";
+import { clearAuth } from "../../util/auth/Auth";
+import { useNavigate } from "react-router-dom";
 
 interface NulRealTimeEditorContext<T extends DataEntry> {
   id: number;
@@ -55,6 +57,8 @@ const loadPage = async <T extends DataEntry>(api: string, id: number): Promise<T
 
 const NulRealTimeEditorFramework = <T extends DataEntry, R>(props: NulRealTimeEditorFrameworkProps<T, R>): JSX.Element => {
   const { api, display, revision, extractor, onChange } = props;
+
+  const navigate = useNavigate();
 
   const [id, setId] = React.useState<number>(0);
   const [data, setData] = React.useState<T | null>(null);
@@ -131,7 +135,11 @@ const NulRealTimeEditorFramework = <T extends DataEntry, R>(props: NulRealTimeEd
           onChange={onPageChange}
           saveText='Export'
           onSave={exportResult}
-          restore={false}
+          restoreText='Logout'
+          onRestore={() => {
+            clearAuth();
+            navigate('/login');
+          }}
         >
           {totalLoaded && data !== null && display && display({ id, data })}
         </NulRevisionContainer>
