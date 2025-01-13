@@ -532,10 +532,15 @@
   dependencies:
     levn "^0.4.1"
 
-"@fontsource/inter@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.npmmirror.com/@fontsource/inter/-/inter-5.1.0.tgz#ab629b2c662457022d2d6a29854b8dc8ba538c47"
-  integrity sha512-zKZR3kf1G0noIes1frLfOHP5EXVVm0M7sV/l9f/AaYf+M/DId35FO4LkigWjqWYjTJZGgplhdv4cB+ssvCqr5A==
+"@fontsource/inter@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.npmmirror.com/@fontsource/inter/-/inter-5.1.1.tgz#401803b6ac4c877f5be94088aa89147ed5a2bd85"
+  integrity sha512-weN3E+rq0Xb3Z93VHJ+Rc7WOQX9ETJPTAJ+gDcaMHtjft67L58sfS65rAjC5tZUXQ2FdZ/V1/sSzCwZ6v05kJw==
+
+"@fontsource/open-sans@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.npmmirror.com/@fontsource/open-sans/-/open-sans-5.1.1.tgz#6792cc01a1d92c097c05d76703b05e1bf74fda8b"
+  integrity sha512-Wfio5om0XH24ZUu6FfW4r50e4xLdoLzvd8midtqUFT2unniyWQj6GJ05RW1YQsHp4Sug3i+agFBIxEmYQzUHSg==
 
 "@humanfs/core@^0.19.0":
   version "0.19.0"
