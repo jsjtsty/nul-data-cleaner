@@ -1,7 +1,13 @@
-import { Box, Button, Pagination, Stack, TextField } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, TextField } from "@mui/material";
 import React, { ReactNode } from "react";
 import NulLinearProgress from "../../components/NulLinearProgress";
 import NulProgressIndicator from "../../components/NulProgressIndicator";
+
+interface NulCategory {
+  id: number;
+  name: string;
+  description: string | null;
+}
 
 interface RevisionContainerProps {
   children?: ReactNode;
@@ -14,11 +20,20 @@ interface RevisionContainerProps {
   restore?: boolean;
   restoreText?: string;
   onRestore?: () => void;
+  category?: boolean;
+  categoryId?: number;
+  categoryOptions?: NulCategory[];
+  onSwitchCategory?: (id: number) => void;
 }
 
 const NulRevisionContainer: React.FC<RevisionContainerProps> = (props) => {
 
-  const { children, total, page, onChange, save = true, saveText = 'Save', onSave, restore = true, restoreText = 'Restore', onRestore } = props;
+  const {
+    children, total, page, onChange,
+    save = true, saveText = 'Save', onSave,
+    restore = true, restoreText = 'Restore', onRestore,
+    category = false, categoryOptions = [], categoryId, onSwitchCategory
+  } = props;
 
   const [pageNavigate, setPageNavigate] = React.useState<string>('');
   const [pageNavigateError, setPageNavigateError] = React.useState<boolean>(false);
@@ -47,6 +62,29 @@ const NulRevisionContainer: React.FC<RevisionContainerProps> = (props) => {
           <Button variant='contained' onClick={onSave}>
             {saveText}
           </Button>
+        }
+        {category &&
+          <Stack direction='row' spacing={1}>
+            <FormControl fullWidth size='small'>
+              <InputLabel>Category</InputLabel>
+              <Select
+                label='Category'
+                value={categoryId}
+                onChange={(event) => {
+                  const raw = event.target.value;
+                  const newValue = typeof raw === 'number' ? raw : parseInt(raw);
+                  if (onSwitchCategory) {
+                    onSwitchCategory(newValue);
+                  }
+                }}
+                fullWidth
+              >
+                {categoryOptions.map(entry =>
+                  <MenuItem value={entry.id}>{entry.name}</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+          </Stack>
         }
         <Stack direction='row' spacing={1}>
           <TextField
@@ -89,8 +127,9 @@ const NulRevisionContainer: React.FC<RevisionContainerProps> = (props) => {
           if (onChange) onChange(value);
         }} />
       </Stack>
-    </Box>
+    </Box >
   );
 };
 
 export default NulRevisionContainer;
+export type { NulCategory };
