@@ -5,8 +5,12 @@ import { Box, Card, CardContent, FormControlLabel, Radio, RadioGroup, Stack, Typ
 
 const BASE_URL = 'http://106.75.215.104';
 
+type Question = 'True' | 'False' | 'Perception' | null;
+type Options = 'True' | 'False' | 'Options' | null;
+
 interface AgricultureImageBenchmarkEntry extends DataEntry {
   document: {
+    questionId: string;
     answer: number;
     aspect: string;
     aspectKnowledge: string;
@@ -21,16 +25,16 @@ interface AgricultureImageBenchmarkEntry extends DataEntry {
     backgroundKnowledge: string;
     uuid: string;
   },
-  question: boolean | null;
-  options: boolean | null;
+  question: Question;
+  options: Options;
   logic: boolean | null;
   optionAnalysis: boolean | null;
   answer: boolean | null;
 }
 
 interface AgricultureImageBenchmarkPutRequest {
-  question: boolean | null;
-  options: boolean | null;
+  question: Question;
+  options: Options;
   logic: boolean | null;
   optionAnalysis: boolean | null;
   answer: boolean | null;
@@ -38,16 +42,17 @@ interface AgricultureImageBenchmarkPutRequest {
 
 const AgricultureImageBenchmarkReviser: React.FC = () => {
 
-  const [question, setQuestion] = React.useState<boolean | null>(null);
+  const [question, setQuestion] = React.useState<Question>(null);
   const [logic, setLogic] = React.useState<boolean | null>(null);
-  const [options, setOptions] = React.useState<boolean | null>(null);
+  const [options, setOptions] = React.useState<Options>(null);
   const [optionAnalysis, setOptionAnalysis] = React.useState<boolean | null>(null);
   const [answer, setAnswer] = React.useState<boolean | null>(null);
 
   const display = (context: NulRealTimeEditorContext<AgricultureImageBenchmarkEntry>): ReactNode => {
     return (
       <Stack display='flex' justifyContent='center' alignItems='center'>
-        UUID: {context.data.document.uuid}
+        <Typography>QuestionID: {context.data.document.questionId}</Typography>
+        <Typography>UUID: {context.data.document.uuid}</Typography>
       </Stack>
     );
   };
@@ -130,8 +135,8 @@ const AgricultureImageBenchmarkReviser: React.FC = () => {
               </Typography>
               <Stack spacing={2}>
                 <Stack spacing={1}>
-                  <Box width='160px'>
-                    <Typography fontWeight={700}>Aspect Knowledge</Typography>
+                  <Box width='190px'>
+                    <Typography fontWeight={700}>Background Knowledge</Typography>
                   </Box>
                   <Typography>
                     {context.data.document.backgroundKnowledge}
@@ -146,12 +151,13 @@ const AgricultureImageBenchmarkReviser: React.FC = () => {
                       name='question-radio-group'
                       value={question}
                       onChange={(event) => {
-                        setQuestion((event.target as HTMLInputElement).value === 'true');
+                        setQuestion((event.target as HTMLInputElement).value as Question);
                       }}
                       row
                     >
-                      <FormControlLabel value='true' control={<Radio />} label="True" />
-                      <FormControlLabel value='false' control={<Radio />} label="False" />
+                      <FormControlLabel value='True' control={<Radio />} label="True" />
+                      <FormControlLabel value='Perception' control={<Radio />} label="Perception" />
+                      <FormControlLabel value='False' control={<Radio />} label="False" />
                     </RadioGroup>
                   </Stack>
                   <Typography>
@@ -167,12 +173,13 @@ const AgricultureImageBenchmarkReviser: React.FC = () => {
                       name='options-radio-group'
                       value={options}
                       onChange={(event) => {
-                        setOptions((event.target as HTMLInputElement).value === 'true');
+                        setOptions((event.target as HTMLInputElement).value as Options);
                       }}
                       row
                     >
-                      <FormControlLabel value='true' control={<Radio />} label="True" />
-                      <FormControlLabel value='false' control={<Radio />} label="False" />
+                      <FormControlLabel value='True' control={<Radio />} label="True" />
+                      <FormControlLabel value='Simple' control={<Radio />} label='Simple' />
+                      <FormControlLabel value='False' control={<Radio />} label="False" />
                     </RadioGroup>
                   </Stack>
                   <Stack>
@@ -209,7 +216,7 @@ const AgricultureImageBenchmarkReviser: React.FC = () => {
                 <Stack spacing={1}>
                   <Stack direction='row' alignItems='center'>
                     <Box>
-                      <Typography fontWeight={700} width='100px'>Logic</Typography>
+                      <Typography fontWeight={700} width='140px'>Option Analysis</Typography>
                     </Box>
                     <RadioGroup
                       name='analysis-radio-group'

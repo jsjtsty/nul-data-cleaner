@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { AgricultureMultipleReviser } from '../pages/RevisePages/AgricultureMultipleReviser';
 import NulNavigator from '../framework/NulNavigator';
 import NulUploader from '../framework/NulUploader';
@@ -14,6 +14,8 @@ import { selectRouterNavigation, selectRouterActivated } from '../action/Router'
 import { LoginPage } from '../pages/LoginPages/LoginPage';
 import { RegisterPage } from '../pages/LoginPages/RegisterPage';
 import { AgricultureImageBenchmarkReviser } from '../pages/RevisePages/AgricultureImageBenchmarkReviser';
+import { AgricultureProblemSolutionReviser } from '../pages/RevisePages/AgricultureProblemSolutionReviser';
+import { SelectionPage } from '../pages/SelectionPage/SelectionPage';
 
 interface NulRouterHelperProps {
   children: JSX.Element;
@@ -87,7 +89,8 @@ const NulRouterContent: React.FC = () => {
       </Route>
       <Route path="/image" element={<AgricultureImageReviser />} />
       <Route path="/image-benchmark" element={<AgricultureImageBenchmarkReviser />} />
-      <Route index element={<Navigate replace to="/image-benchmark" />} />
+      <Route path="/problem-solution" element={<AgricultureProblemSolutionReviser />} />
+      <Route index element={<SelectionPage />} />
     </Routes>
   );
 };

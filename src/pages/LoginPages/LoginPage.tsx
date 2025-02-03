@@ -20,7 +20,7 @@ const LoginPage: React.FC = () => {
     if (loggedIn) {
       if (!navigated) {
         // dispatch(authActions.navigate());
-        navigate('/image-benchmark');
+        navigate('/');
       }
     } else {
       dispatch(authActions.load());

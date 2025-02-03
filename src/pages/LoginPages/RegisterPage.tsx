@@ -1,14 +1,13 @@
 import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
 import loginBackgroundUrl from '../../assets/login.svg';
-import { useNavigate } from 'react-router-dom';
 import { authActions, selectRegisterSuccess } from '../../action/Auth';
 import { useAppDispatch, useAppSelector } from '../../action/hooks';
 import { postGlobalAlert } from '../../action/GlobalAlert';
+import { navigate } from '../../action/Router';
 import '@fontsource/open-sans';
 
 const RegisterPage: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const registerSuccess = useAppSelector(selectRegisterSuccess);
