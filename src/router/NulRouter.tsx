@@ -16,6 +16,7 @@ import { RegisterPage } from '../pages/LoginPages/RegisterPage';
 import { AgricultureImageBenchmarkReviser } from '../pages/RevisePages/AgricultureImageBenchmarkReviser';
 import { AgricultureProblemSolutionReviser } from '../pages/RevisePages/AgricultureProblemSolutionReviser';
 import { SelectionPage } from '../pages/SelectionPage/SelectionPage';
+import { AgricultureImageProblemSolutionReviser } from '../pages/RevisePages/AgricultureImageProblemSolutionReviser';
 
 interface NulRouterHelperProps {
   children: JSX.Element;
@@ -90,6 +91,7 @@ const NulRouterContent: React.FC = () => {
       <Route path="/image" element={<AgricultureImageReviser />} />
       <Route path="/image-benchmark" element={<AgricultureImageBenchmarkReviser />} />
       <Route path="/problem-solution" element={<AgricultureProblemSolutionReviser />} />
+      <Route path="/image-problem" element={<AgricultureImageProblemSolutionReviser />} />
       <Route index element={<SelectionPage />} />
     </Routes>
   );

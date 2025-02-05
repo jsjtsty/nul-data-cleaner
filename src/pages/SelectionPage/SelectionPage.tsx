@@ -20,6 +20,11 @@ const routeList: Option[] = [
     route: '/problem-solution'
   },
   {
+    id: 'image-problem-solution',
+    name: 'Multimodal Problem Solution',
+    route: '/image-problem'
+  },
+  {
     id: 'multiple',
     name: 'Multi-turn Conversation (Legacy UI)',
     route: '/multiple'
