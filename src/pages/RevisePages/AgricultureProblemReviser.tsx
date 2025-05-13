@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { NulEditorContext, NulEditorFramework } from "../../framework/NulEditorFramework/NulEditorFramework";
 import { AgricultureProblemAnswerDataEntry, AgricultureProblemChoiceDataEntry, AgricultureProblemDataEntry, AgricultureProblemParser, AgricultureProblemType } from "../../util/parsers/AgricultureProblemParser";
-import { Autocomplete, Box, Card, CardContent, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Card, CardContent, FormControlLabel, Stack, Switch, TextField, Typography } from "@mui/material";
 import typeData from "../../data/AgricultureProblemTypes.json";
 
 const domainOptions = typeData.domain.map(entry => entry.name);
@@ -13,6 +13,9 @@ const AgricultureProblemReviser: React.FC = () => {
   const [domainSubType, setDomainSubType] = React.useState<string | null>(null);
   const [classType, setClassType] = React.useState<string | null>(null);
   const [classTask, setClassTask] = React.useState<string | null>(null);
+
+  const [problemAccuracy, setProblemAccuracy] = React.useState<boolean>(true);
+  const [answerAccuracy, setAnswerAccuracy] = React.useState<boolean>(true);
 
   const [domainSubOptions, setDomainSubOptions] = React.useState<string[]>([]);
   const [taskOptions, setTaskOptions] = React.useState<string[]>([]);
@@ -98,6 +101,18 @@ const AgricultureProblemReviser: React.FC = () => {
                 Information
               </Typography>
               <Stack spacing={2} paddingTop='20px'>
+                <Stack spacing={2} direction="row" alignItems="center">
+                  <Box>
+                    <Typography fontWeight={700}>Accuracy</Typography>
+                  </Box>
+                  <FormControlLabel control={<Switch checked={problemAccuracy} onChange={(event) => {
+                    setProblemAccuracy(event.target.checked);
+                  }} />} label="Problem and Choices" />
+                  <FormControlLabel control={<Switch checked={answerAccuracy} onChange={(event) => {
+                    setAnswerAccuracy(event.target.checked);
+                  }}/>} label="Answer" />
+                </Stack>
+
                 <Stack spacing={1}>
                   <Box>
                     <Typography fontWeight={700}>Question</Typography>
@@ -137,6 +152,10 @@ const AgricultureProblemReviser: React.FC = () => {
       extractor={(data) => {
         return {
           ...data,
+          accuracy: {
+            problem: problemAccuracy,
+            answer: answerAccuracy
+          },
           domain: {
             type: domainType,
             subtype: domainSubType
@@ -159,6 +178,8 @@ const AgricultureProblemReviser: React.FC = () => {
           typeData.class.find(val => val.name === data.class.class)?.children.map(val => val.name) ?? []
         );
         setClassTask(data.class.task);
+        setProblemAccuracy(data.accuracy.problem);
+        setAnswerAccuracy(data.accuracy.answer);
       }}
       onRestore={(origin) => {
         setDomainType(origin.domain.type);
@@ -171,6 +192,8 @@ const AgricultureProblemReviser: React.FC = () => {
           typeData.class.find(val => val.name === origin.class.class)?.children.map(val => val.name) ?? []
         );
         setClassTask(origin.class.task);
+        setProblemAccuracy(origin.accuracy.problem);
+        setAnswerAccuracy(origin.accuracy.answer);
       }}
     />
   );

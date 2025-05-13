@@ -25,6 +25,10 @@ interface AgricultureProblemAnswerRawDataEntry extends AgricultureProblemRawData
 
 interface AgricultureProblemDataEntry extends DataEntry {
   type: AgricultureProblemType;
+  accuracy: {
+    problem: boolean;
+    answer: boolean;
+  },
   domain: {
     type: string | null;
     subtype: string | null;
@@ -61,11 +65,15 @@ class AgricultureProblemParser extends Parser<AgricultureProblemDataEntry> {
 
       if (type === AgricultureProblemType.ANSWER) {
         const data = entry as AgricultureProblemAnswerRawDataEntry;
-        const tranformed: AgricultureProblemAnswerDataEntry = {
+        const transformed: AgricultureProblemAnswerDataEntry = {
           id: data.id,
           type: type,
           question: data.question,
           answer: data.answer,
+          accuracy: {
+            problem: true,
+            answer: true
+          },
           domain: {
             type: entry.type,
             subtype: null
@@ -75,7 +83,7 @@ class AgricultureProblemParser extends Parser<AgricultureProblemDataEntry> {
             task: null
           }
         };
-        result.push(tranformed);
+        result.push(transformed);
       } else {
         const data = entry as AgricultureProblemChoiceRawDataEntry;
         const sortedKeys = Object.keys(data.options).sort();
@@ -100,12 +108,16 @@ class AgricultureProblemParser extends Parser<AgricultureProblemDataEntry> {
           answer.push(index);
         }
 
-        const tranformed: AgricultureProblemChoiceDataEntry = {
+        const transformed: AgricultureProblemChoiceDataEntry = {
           id: data.id,
           type: type,
           question: data.question,
           options: options,
           answer: answer,
+          accuracy: {
+            problem: true,
+            answer: true
+          },
           domain: {
             type: data.type,
             subtype: null
@@ -116,7 +128,7 @@ class AgricultureProblemParser extends Parser<AgricultureProblemDataEntry> {
           }
         };
 
-        result.push(tranformed);
+        result.push(transformed);
       }
     }
 
@@ -131,7 +143,16 @@ class AgricultureProblemParser extends Parser<AgricultureProblemDataEntry> {
 
 class AgricultureProblemResultParser extends AgricultureProblemParser {
   public override readOriginString(data: string): AgricultureProblemData {
-    return JSON.parse(data);
+    const result = JSON.parse(data);
+    for (const entry of result) {
+      if (!('accuracy' in entry)) {
+        entry['accuracy'] = {
+          problem: true,
+          answer: true
+        };
+      }
+    }
+    return result;
   }
 }
 
